@@ -1,0 +1,71 @@
+version: "2.2"
+services:
+  web:
+    build: ./python-app
+    environment:
+      - API_KEY=${API_KEY}
+      - API_URL=${API_URL}
+      - ELASTIC_HOST=${ELASTIC_HOST}
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_INDEX=${ELASTIC_INDEX}
+      - PROJECT_ID=${PROJECT_ID}
+    ports:
+      - "8501:8501"
+    volumes:
+      - ${ELASTIC_CA_CERTS}:/app/ca.crt
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    volumes:
+      - ${ELASTIC_CA_CERTS}:/usr/share/kibana/config/certs/ca/ca.crt
+      - kibanadata:/usr/share/kibana/data
+    # network_mode: host
+    ports:
+      - ${KIBANA_PORT}:5601
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=${ELASTIC_HOST}
+      - ELASTICSEARCH_USERNAME=${ELASTIC_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
+      - ENTERPRISESEARCH_HOST=${SEARCH_HOST}:${SEARCH_PORT}
+      - enterpriseSearch.host=${SEARCH_HOST}:${SEARCH_PORT}
+    healthcheck:
+      test:
+        [
+            "CMD-SHELL",
+            "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+  enterprisesearch:
+    depends_on:
+      kibana:
+        condition: service_healthy
+    image: docker.elastic.co/enterprise-search/enterprise-search:${STACK_VERSION}
+    # network_mode: host
+    volumes:
+      - ${ELASTIC_CA_CERTS}:/usr/share/enterprise-search/config/certs/ca/ca.crt
+      - enterprisesearchdata:/usr/share/enterprise-search/config
+    ports:
+      - ${SEARCH_PORT}:3002
+      # - 3001:3001
+    environment:
+      - SERVERNAME=enterprisesearch
+      - secret_management.encryption_keys=[${ENCRYPTION_KEY}]
+      - elasticsearch.host=${ELASTIC_HOST}
+      - elasticsearch.username=${ELASTIC_USERNAME}
+      - elasticsearch.password=${ELASTIC_PASSWORD}
+      - kibana.external_url=${KIBANA_HOST}:${KIBANA_PORT}
+      - allow_es_settings_modification=true
+      - elasticsearch.ssl.enabled=true
+      - elasticsearch.ssl.verify=false
+      - elasticsearch.ssl.certificate_authority=/usr/share/enterprise-search/config/certs/ca/ca.crt
+      - connector.crawler.security.dns.allow_loopback_access=true
+      - connector.crawler.security.dns.allow_private_networks_access=true
+volumes:
+  enterprisesearchdata:
+    driver: local
+  kibanadata:
+    driver: local
