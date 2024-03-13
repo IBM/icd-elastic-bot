@@ -1,3 +1,8 @@
-ca.crt
+.terraform
+.terraform*
+terraform.tfvars
+terraform.tfstate*
+todo.txt
+*.json
+*.cert
 .env
-venv

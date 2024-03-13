@@ -45,7 +45,7 @@ def search(query_text):
     fields = ["title", "body_content", "url"]
     try:
         resp = es.search(index=es_index, query=es_elser_query, fields=fields, size=10, source=False)
-        # logging.info(f"Elasticsearch response: {resp}")
+        logging.info(f"Elasticsearch response: {resp}")
 
         if resp['hits']['hits']:
             body = resp['hits']['hits'][0]['fields'].get('body_content', [None])[0]
@@ -108,7 +108,7 @@ def prompt_template(context, question_text):
 
 
 st.write(
-    "Hi I am ICD Bot , I have some knowledge on ICD runbooks and documentation , please ask me anything related to that")
+    "Hi I am a Bot , I have some knowledge on ICD runbooks and documentation , please ask me anything related to that")
 query = st.chat_input("You: ")
 with st.chat_message("user"):
     # Generate and display response on form submission
