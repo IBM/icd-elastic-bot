@@ -108,7 +108,7 @@ def prompt_template(context, question_text):
 
 
 st.write(
-    "Hi I am a Bot , I have some knowledge on ICD runbooks and documentation , please ask me anything related to that")
+    "Hi, I am a chat bot. Ask me any question you like and I will try to answer it!")
 query = st.chat_input("You: ")
 with st.chat_message("user"):
     # Generate and display response on form submission
@@ -122,7 +122,7 @@ with st.chat_message("user"):
             answer = chat_gpt_ibm(prompt)
             # TODO:
             if negResponse in answer:
-                st.write(f"ICD: {answer.strip()}")
+                st.write(f"BOT: {answer.strip()}")
             else:
-                st.markdown(f"ICD: {answer}\n\nDocs: {url}")
+                st.markdown(f"BOT: {answer}\n\nDocs: {url}")
 

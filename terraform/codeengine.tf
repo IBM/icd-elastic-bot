@@ -43,6 +43,7 @@ resource "ibm_code_engine_app" "kibana_app" {
   scale_cpu_limit     = 4
   scale_memory_limit  = "16G"
 
+
   run_env_variables {
     type  = "literal"
     name  = "ELASTICSEARCH_HOSTS"
@@ -259,4 +260,8 @@ resource "ibm_code_engine_app" "python_app" {
 
 output "kibana_endpoint" {
   value = ibm_code_engine_app.kibana_app.endpoint
+}
+
+output "python_endpoint" {
+  value = ibm_code_engine_app.python_app.endpoint
 }

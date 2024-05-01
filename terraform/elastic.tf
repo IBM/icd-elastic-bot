@@ -6,6 +6,22 @@ resource "ibm_database" "elastic" {
   location      = var.region
   adminpassword = var.es_password
   resource_group_id = ibm_resource_group.bot_resource_group.id
+
+  group {
+    group_id = "member"
+
+    memory {
+      allocation_mb = 15360
+    }
+
+    disk {
+      allocation_mb = 102400
+    }
+
+    cpu {
+      allocation_count = 3
+    }
+  }
 }
 
 data "ibm_database_connection" "es_connection" {
