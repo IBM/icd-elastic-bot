@@ -213,7 +213,7 @@ resource "ibm_code_engine_app" "python_app" {
   run_env_variables {
     type  = "literal"
     name  = "API_KEY"
-    value = var.ibmcloud_watsonx_api_key
+    value = var.ibmcloud_api_key
   }
   run_env_variables {
     type  = "literal"

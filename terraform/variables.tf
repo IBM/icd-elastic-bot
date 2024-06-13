@@ -10,4 +10,3 @@ variable "elastic_index" {
     default = "search-bot"
 }
 variable "wx_project_id" {}
-variable "ibmcloud_watsonx_api_key" {}
