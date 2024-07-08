@@ -73,7 +73,7 @@ def chat_gpt_ibm(prompt, max_tokens=1024):
         "url": api_url,
         "apikey": api_key
     }
-    model_id = ModelTypes.LLAMA_2_70B_CHAT
+    model_id = ModelTypes.LLAMA_2_13B_CHAT
     gen_parms = {
         "decoding_method": "sample",
         "max_new_tokens": 4096,

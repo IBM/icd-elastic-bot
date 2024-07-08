@@ -3,6 +3,7 @@ resource "ibm_cr_namespace" "elastic-bot" {
   resource_group_id = ibm_resource_group.bot_resource_group.id
 }
 
+
 resource "null_resource" "pythonApp" {
   triggers = {
     ibmcloud_api_key = var.ibmcloud_api_key
@@ -21,7 +22,7 @@ resource "null_resource" "pythonApp" {
       ibmcloud plugin install cr
       ibmcloud cr region-set eu-gb
       ibmcloud cr login
-      docker push uk.icr.io/elasticbot/pythonapp:latest 
+      docker push uk.icr.io/elasticbot/pythonapp:latest
     EOF
 
   }

@@ -36,7 +36,7 @@ resource "ibm_code_engine_project" "elastic-bot" {
 resource "ibm_code_engine_app" "kibana_app" {
   project_id          = ibm_code_engine_project.elastic-bot.project_id
   name                = "kibana-app"
-  image_reference     = "docker.elastic.co/kibana/kibana:${var.es_version}.${var.es_minor_version}"
+  image_reference     = "docker.elastic.co/kibana/kibana:${local.es-full-version}"
   image_port          = 5601
   scale_min_instances = 1
   scale_max_instances = 1
@@ -102,7 +102,7 @@ resource "ibm_code_engine_app" "kibana_app" {
 resource "ibm_code_engine_app" "enterprise_search_app" {
   project_id          = ibm_code_engine_project.elastic-bot.project_id
   name                = "elastic-bot-app"
-  image_reference     = "docker.elastic.co/enterprise-search/enterprise-search:${var.es_version}.${var.es_minor_version}"
+  image_reference     = "docker.elastic.co/enterprise-search/enterprise-search:${local.es-full-version}"
   image_port          = 3002
   scale_min_instances = 1
   scale_max_instances = 1
@@ -213,12 +213,12 @@ resource "ibm_code_engine_app" "python_app" {
   run_env_variables {
     type  = "literal"
     name  = "API_KEY"
-    value = var.ibmcloud_api_key
+    value =  var.ibmcloud_api_key
   }
   run_env_variables {
     type  = "literal"
     name  = "API_URL"
-    value = "https://us-south.ml.cloud.ibm.com"
+    value = "https://${var.region}.ml.cloud.ibm.com"
   }
   run_env_variables {
     type  = "literal"
