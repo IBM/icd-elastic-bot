@@ -45,7 +45,7 @@ def search(query_text):
     fields = ["title", "body_content", "url"]
     try:
         resp = es.search(index=es_index, query=es_elser_query, fields=fields, size=10, source=False)
-        # logging.info(f"Elasticsearch response: {resp}")
+        logging.info(f"Elasticsearch response: {resp}")
 
         if resp['hits']['hits']:
             body = resp['hits']['hits'][0]['fields'].get('body_content', [None])[0]
@@ -73,7 +73,7 @@ def chat_gpt_ibm(prompt, max_tokens=1024):
         "url": api_url,
         "apikey": api_key
     }
-    model_id = ModelTypes.LLAMA_2_70B_CHAT
+    model_id = ModelTypes.LLAMA_2_13B_CHAT
     gen_parms = {
         "decoding_method": "sample",
         "max_new_tokens": 4096,
@@ -108,7 +108,7 @@ def prompt_template(context, question_text):
 
 
 st.write(
-    "Hi I am ICD Bot , I have some knowledge on ICD runbooks and documentation , please ask me anything related to that")
+    "Hi, I am a chat bot. Ask me any question you like and I will try to answer it!")
 query = st.chat_input("You: ")
 with st.chat_message("user"):
     # Generate and display response on form submission
@@ -122,7 +122,7 @@ with st.chat_message("user"):
             answer = chat_gpt_ibm(prompt)
             # TODO:
             if negResponse in answer:
-                st.write(f"ICD: {answer.strip()}")
+                st.write(f"BOT: {answer.strip()}")
             else:
-                st.markdown(f"ICD: {answer}\n\nDocs: {url}")
+                st.markdown(f"BOT: {answer}\n\nDocs: {url}")
 
